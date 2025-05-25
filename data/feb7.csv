@@ -1,0 +1,24 @@
+﻿Sleep Score 1 Day,
+Date,2025-02-07
+Sleep Duration,9h 11m
+Sleep Score,81
+Quality,Good
+
+Sleep Score Factors,
+Sleep Duration,9h 11m
+Stress Avg,19
+Deep Sleep Duration,1h 27m
+Light Sleep Duration,6h 18m
+REM Duration,1h 27m
+Awake Time,21m
+
+Sleep Timeline Metrics,
+Restless Moments,53
+Resting Heart Rate,48 bpm
+Body Battery Change,+86
+Avg SpO₂,96%
+Lowest SpO2,92%
+Avg Respiration,14 brpm
+Lowest Respiration,12 brpm
+Avg Overnight HRV,87 ms
+7d Avg HRV,Balanced
