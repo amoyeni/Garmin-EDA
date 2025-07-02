@@ -87,10 +87,8 @@ def load_data():
     """
     df = pd.read_sql(query, engine)
 
-    # ⏱ Ensure datetime format
     df['date'] = pd.to_datetime(df['date'])
 
-    # 🛠 Ensure numeric types
     numeric_cols = ['avgOvernightHrv', 'sleepDuration', 'restingHeartRate']
     for col in numeric_cols:
         df[col] = pd.to_numeric(df[col], errors='coerce')
