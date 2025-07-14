@@ -1,0 +1,35 @@
+name: Daily Garmin Sleep Update
+
+on:
+  schedule:
+    - cron: '0 10 * * *'  
+  workflow_dispatch:     
+
+jobs:
+  update-sleep-data:
+    runs-on: ubuntu-latest
+
+    env:
+      EMAIL: ${{ secrets.EMAIL }}
+      GARMINPASSWORD: ${{ secrets.GARMINPASSWORD }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install pandas sqlalchemy psycopg2-binary garminconnect
+
+    - name: 🚀 Run Garmin update script
+      run: python update_sleep_data.py
