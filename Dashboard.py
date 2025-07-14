@@ -32,13 +32,7 @@ st.set_page_config(page_title="Sleep & Recovery Dashboard", layout="wide")
 def load_data():
     query = """
         SELECT
-            "date",
-            "avgOvernightHrv",
-            "sleepDuration",
-            "restingHeartRate",
-            "deepSleepDuration",
-            "remSleepDuration",
-            "lightSleepDuration"
+            *
         FROM simplesleepdata
         ORDER BY date
     """
@@ -69,22 +63,37 @@ today_row = get_today_data(df)
 st.title("Garmin Sleep & Training Dashboard")
 st.markdown("---")
 
-# Todays Data
-st.subheader("Today's Data")
-col1, col2, col3 = st.columns(3)
+# Today's Data
 if not today_row.empty:
     row = today_row.iloc[0]
-    col1.metric("HRV", f"{row['avgOvernightHrv']:.1f} ms")
+
+    # Big Card
+    st.subheader("Recovery Today")
+    st.markdown(f"<h1 style='text-align: center; color: #4CAF50;'>{row['avgOvernightHrv']:.1f} ms</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h3 style='text-align: center;'>Average Overnight HRV</h3>", unsafe_allow_html=True)
+    st.markdown("---") 
+
+    # Other Metrics
+    st.subheader("Other Key Metrics")
+    col2, col3, col4, col5 = st.columns(4) 
     col2.metric("Sleep Duration", format_seconds(row['sleepDuration']))
     col3.metric("Resting HR", f"{row['restingHeartRate']:.0f} bpm")
+    col4.metric("Sleep HR", f"{row['SleepHR']:.0f} bpm")
+    col5.metric("Waking up HR", f"{row['wakeHR']:.0f} bpm")
+
 
 else:
-    col1.metric("HRV", "—")
+    st.subheader("Recovery Today")
+    st.markdown("<h1 style='text-align: center; color: grey;'>—</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h3 style='text-align: center;'>Average Overnight HRV</h3>", unsafe_allow_html=True)
+    st.markdown("---")
+
+    st.subheader("Other Key Metrics")
+    col2, col3 = st.columns(2)
     col2.metric("Sleep Duration", "—")
-    col3.metric("Resting HR", "_")
+    col3.metric("Resting HR", "—")
 
     st.markdown("No data available for today.")
-
 
 
 labels = 'Deep Sleep', 'REM Sleep', 'Light Sleep'
