@@ -21,7 +21,7 @@ today = datetime.date.today().strftime("%Y-%m-%d")
 
 
 def getsleep(date):
-    data = garmin.get_sleep_data()
+    data = garmin.get_sleep_data(date)
 
     # Safeguard: if no data or missing expected structure
     if not data or not isinstance(data, dict) or 'dailySleepDTO' not in data:
