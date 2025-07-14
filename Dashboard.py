@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import os
 import datetime
 
 from sqlalchemy import create_engine
@@ -78,3 +77,7 @@ else:
     st.markdown("No data available for today.")
 
 
+if st.button("Refresh data"):
+    load_data.clear()  # clears the cache
+
+df = load_data()
