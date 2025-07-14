@@ -23,11 +23,21 @@ today = datetime.date.today().strftime("%Y-%m-%d")
 def getsleep(date):
     data = garmin.get_sleep_data(date)
 
-    # Safeguard: if no data or missing expected structure
     if not data or not isinstance(data, dict) or 'dailySleepDTO' not in data:
         return pd.DataFrame()
 
     dailysleep_dto = data.get('dailySleepDTO', {})
+
+    sleep_hr = None
+    wake_hr = None
+    hr_samples = data.get('sleepHeartRate', [])
+
+    if hr_samples and isinstance(hr_samples, list):
+        hr_samples_sorted = sorted(hr_samples, key=lambda x: x.get('startGMT', 0))
+        if len(hr_samples_sorted) > 0:
+            sleep_hr = hr_samples_sorted[0].get('value', None)
+            wake_hr = hr_samples_sorted[-1].get('value', None)
+
 
     sleepdata = {
         'date': dailysleep_dto.get('calendarDate'),
@@ -46,12 +56,13 @@ def getsleep(date):
         'awakeCounter': dailysleep_dto.get('awakeCount'),
         'avgOvernightHrv': data.get('avgOvernightHrv'),
         'restingHeartRate': data.get('restingHeartRate'),
-        'restlessmoment': data.get('restlessMomentsCount')
+        'restlessmoment': data.get('restlessMomentsCount'),
+        'sleepHR': sleep_hr,   
+        'wakeHR': wake_hr     
     }
 
     df_sleepdata = pd.DataFrame([sleepdata])
 
-    # Convert time columns if present, otherwise NaT
     for col in ['startTime', 'endTime']:
         if pd.notnull(df_sleepdata.at[0, col]):
             df_sleepdata[col] = pd.to_datetime(df_sleepdata[col], unit='ms')
