@@ -31,5 +31,5 @@ jobs:
       run: |
         pip install pandas sqlalchemy psycopg2-binary garminconnect
 
-    - name: 🚀 Run Garmin update script
+    - name: Run Garmin update script
       run: python update_daily.py

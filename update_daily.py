@@ -9,8 +9,8 @@ password = os.environ("garminpassword")\
 
 garmin = garminconnect.Garmin(email, password)
 garmin.login()
-email = os.environ("email")
-password = os.environ("garminpassword")
+email = os.environ["email"]
+password = os.environ["garminpassword"]
 garmin = garminconnect.Garmin(email, password)
 garmin.login()
 
