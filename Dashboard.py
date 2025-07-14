@@ -49,6 +49,10 @@ def load_data():
 
 df = load_data()
 
+if st.button("Refresh data"):
+    load_data.clear()   
+    df = load_data()    
+
 def get_today_data(df):
     today = pd.to_datetime(datetime.date.today())
     df['date_only'] = df['date'].dt.normalize()
@@ -77,7 +81,6 @@ else:
     st.markdown("No data available for today.")
 
 
-if st.button("Refresh data"):
-    load_data.clear()  # clears the cache
+
 
 df = load_data()
