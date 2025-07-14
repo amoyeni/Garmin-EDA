@@ -4,15 +4,13 @@ import os
 import datetime
 
 from sqlalchemy import create_engine
-from dotenv import load_dotenv
 
-load_dotenv()
+user = st.secrets["user"]
 
-user = os.getenv("user")
-password = os.getenv("password")
-host = os.getenv("host")
-port = os.getenv("port")
-dbname = os.getenv("dbname")
+password = st.secrets["password"]
+host = st.secrets["host"]
+port = st.secrets["port"]
+dbname = st.secrets["dbname"]
 
 engine = create_engine(f'postgresql://{user}:{password}@{host}:{port}/{dbname}')
 
