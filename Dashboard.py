@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import datetime
+import matplotlib.pyplot as plt
+
 
 from sqlalchemy import create_engine
 
@@ -82,5 +84,8 @@ else:
 
 
 
+labels = 'Deep Sleep', 'REM Sleep', 'Light Sleep'
+sizes = [row['deepSleepDuration'], row['remSleepDuration'],row['lightSleepDuration']]
+plt.pie(sizes, labels=labels, autopct='%1.1f%%')
+st.pyplot()
 
-df = load_data()
