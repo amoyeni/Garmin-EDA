@@ -35,7 +35,10 @@ def load_data():
             "date",
             "avgOvernightHrv",
             "sleepDuration",
-            "restingHeartRate"
+            "restingHeartRate",
+            "deepSleepDuration",
+            "remSleepDuration",
+            "lightSleepDuration"
         FROM simplesleepdata
         ORDER BY date
     """
