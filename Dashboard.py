@@ -3,7 +3,6 @@ import pandas as pd
 import datetime
 import matplotlib.pyplot as plt
 
-
 from sqlalchemy import create_engine
 
 user = st.secrets["user"]
@@ -22,7 +21,6 @@ def format_seconds(seconds):
     hours = total_minutes // 60
     minutes = total_minutes % 60
     return f"{hours}h {minutes}m"
-
 
 
 st.set_page_config(page_title="Sleep & Recovery Dashboard", layout="wide")
@@ -63,71 +61,23 @@ today_row = get_today_data(df)
 st.title("Garmin Sleep & Training Dashboard")
 st.markdown("---")
 
-
-## Today's Data and 7-Day HRV Trend
-col_hrv_card, col_hrv_graph = st.columns([1, 2])
-
-with col_hrv_card:
-    st.subheader("Your Recovery Today")
-    if not today_row.empty:
-        row = today_row.iloc[0]
-        st.markdown(f"<h1 style='text-align: center; color: #4CAF50;'>{row['avgOvernightHrv']:.1f} ms</h1>", unsafe_allow_html=True)
-        st.markdown(f"<h3 style='text-align: center;'>Average Overnight HRV</h3>", unsafe_allow_html=True)
-    else:
-        st.markdown("<h1 style='text-align: center; color: grey;'>—</h1>", unsafe_allow_html=True)
-        st.markdown(f"<h3 style='text-align: center;'>Average Overnight HRV</h3>", unsafe_allow_html=True)
-
-with col_hrv_graph:
-    st.subheader("Last 7 Days HRV Trend")
-    end_date = pd.to_datetime(datetime.date.today()) 
-    start_date = end_date - datetime.timedelta(days=6) 
-
-    recent_hrv_df = df[(df['date'] >= start_date) & (df['date'] <= end_date)].copy()
-    
-    recent_hrv_df['avgOvernightHrv'] = pd.to_numeric(recent_hrv_df['avgOvernightHrv'], errors='coerce')
-    recent_hrv_df.dropna(subset=['avgOvernightHrv'], inplace=True)
-
-
-    if not recent_hrv_df.empty:
-        hrv_mean = recent_hrv_df['avgOvernightHrv'].mean()
-        hrv_std = recent_hrv_df['avgOvernightHrv'].std()
-
-        
-        lower_limit = hrv_mean - hrv_std
-        upper_limit = hrv_mean + hrv_std
-
-        fig, ax = plt.subplots(figsize=(8, 4)) 
-        ax.plot(recent_hrv_df['date'], recent_hrv_df['avgOvernightHrv'], marker='o', linestyle='-', color='skyblue', label='Daily HRV')
-
-        # Plot limits
-        ax.axhline(y=upper_limit, color='red', linestyle='--', label='Upper Limit')
-        ax.axhline(y=lower_limit, color='green', linestyle='--', label='Lower Limit')
-        ax.axhline(y=hrv_mean, color='gray', linestyle=':', label='7-Day Avg')
-
-
-        ax.set_title('7-Day HRV Trend with Limits')
-        ax.set_ylabel('HRV (ms)')
-        ax.set_xlabel('Date')
-        ax.grid(True, linestyle=':', alpha=0.6)
-        ax.legend()
-        plt.xticks(rotation=45)
-        plt.tight_layout() # Adjust layout to prevent labels from overlapping
-        st.pyplot(fig)
-    else:
-        st.info("Not enough HRV data available for the last 7 days to show a trend.")
-
-st.markdown("---") # Separator after the top section
-
-
-
 # Today's Data
 if not today_row.empty:
     row = today_row.iloc[0]
+    hrv_card, hrv_graph = st.columns([1, 2])
 
     # Big Card
     st.subheader("Recovery Today")
     st.markdown(f"<h1 style='text-align: center; color: #4CAF50;'>{row['avgOvernightHrv']:.1f} ms</h1>", unsafe_allow_html=True)
     st.markdown(f"<h3 style='text-align: center;'>Average Overnight HRV</h3>", unsafe_allow_html=True)
+
+    st.subheader("Last 7 Days HRV Trend")
+    end_date = pd.to_datetime(datetime.date.today()) 
+    start_date = end_date - datetime.timedelta(days=6) 
+    recent_hrv_df = df[(df['date'] >= start_date) & (df['date'] <= end_date)].copy()
+
+
+
     st.markdown("---") 
 
     # Other Metrics
