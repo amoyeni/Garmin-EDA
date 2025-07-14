@@ -4,13 +4,8 @@ import pandas as pd
 import os
 import garminconnect
 
-email = os.environ("email")
-password = os.environ("garminpassword")\
-
-garmin = garminconnect.Garmin(email, password)
-garmin.login()
-email = os.environ["email"]
-password = os.environ["garminpassword"]
+email = os.environ["EMAIL"]
+password = os.environ["GARMINPASSWORD"]
 garmin = garminconnect.Garmin(email, password)
 garmin.login()
 
